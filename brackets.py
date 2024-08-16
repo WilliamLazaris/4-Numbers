@@ -2,7 +2,7 @@ import math
 from itertools import product
 
 def safe_eval(expression):
-    try:
+    try:3
         result = eval(expression)
         if isinstance(result, complex):  # Ignore complex results
             return None

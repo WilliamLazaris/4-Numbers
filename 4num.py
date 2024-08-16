@@ -15,7 +15,7 @@ def factorial_or_sqrt(n):
         options.append(math.sqrt(n))
     return options
 
-def check_combinat0ions_to_ten(numbers):
+def check_combinations_to_ten(numbers):
     operators = ['+', '-', '*', '/', '**']
     combinations = []
     for a in factorial_or_sqrt(numbers[0]):
