@@ -31,7 +31,6 @@ def factorial_sqrt_neg(n):
     options = [(f"{int(n)}" if n.is_integer() else f"{round(n, 1)}", n)]  # Store formatted expression and its value
 
     # Check if n is a valid integer for factorial calculation
-
     if n.is_integer() and (n in [0,3,4,5,6] or n >= 10):  # Limiting factorial to 0, 3, 4,10+
         n_int = int(n)
         factorial_val = math.factorial(n_int)
