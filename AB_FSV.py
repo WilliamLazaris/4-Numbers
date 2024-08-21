@@ -58,7 +58,7 @@ def factorial_sqrt_neg(n):
 def check_combinations_to_ten(numbers):
     operators = ['+', '-', '*', '/', '**']
     combinations = []
-    
+
     for ops in product(operators, repeat=3):
         for a_expr, a in factorial_sqrt_neg(numbers[0]):
             for b_expr, b in factorial_sqrt_neg(numbers[1]):
@@ -72,6 +72,35 @@ def check_combinations_to_ten(numbers):
                             combination = f"{a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr}"
                             combinations.append(combination)
 
+
+                        # Case 1: (AB) (CD)
+                        expression_with_parens = f"({a} {ops[0]} {b}) {ops[1]} ({c} {ops[2]} {d})"
+                        if parentheses_needed(expression, expression_with_parens):
+                            result = safe_eval(expression_with_parens)
+                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                                combination = f"({a_expr} {ops[0]} {b_expr}) {ops[1]} ({c_expr} {ops[2]} {d_expr})"
+                                combinations.append(combination)
+
+                        # Apply factorial_sqrt_neg to AB and CD
+                        ab_val = safe_eval(f"{a} {ops[0]} {b}")
+                        cd_val = safe_eval(f"{c} {ops[2]} {d}")
+                        
+                        if ab_val is not None and cd_val is not None:
+                            for ab_expr, ab in factorial_sqrt_neg(ab_val):
+                                for cd_expr, cd in factorial_sqrt_neg(cd_val):
+                                    
+                                    # Case 2: factorial_sqrt_neg(AB) and factorial_sqrt_neg(CD)
+                                    expression_with_parens_and_operations = f"{ab} {ops[1]} {cd}"
+                                    result = safe_eval(expression_with_parens_and_operations)
+                                    if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                                        combination = f"{ab_expr} {ops[1]} {cd_expr}"
+                                        combinations.append(combination)
+                                    
+                                    # Add parentheses back for AB and CD if needed
+                                    expression_with_all_parens = f"({a_expr} {ops[0]} {b_expr}) {ops[1]} ({c_expr} {ops[2]} {d_expr})"
+                                    if parentheses_needed(expression_with_parens_and_operations, expression_with_all_parens):
+                                        result = safe_eval(expression_with_all_parens)
+
                         # Apply factorial/sqrt/negative to expressions inside parentheses
                         for ab_expr, ab in factorial_sqrt_neg(safe_eval(f"{a} {ops[0]} {b}")):
                             for bc_expr, bc in factorial_sqrt_neg(safe_eval(f"({b} {ops[1]} {c})")):
@@ -81,9 +110,11 @@ def check_combinations_to_ten(numbers):
                                     expression_with_parens = f"{ab} {ops[1]} {cd}"
                                     if parentheses_needed(expression, expression_with_parens):
                                         result = safe_eval(expression_with_parens)
+
                                         if result is not None and math.isclose(result, 10, rel_tol=1e-9):
                                             combination = f"({ab_expr}) {ops[1]} ({cd_expr})"
                                             combinations.append(combination)
+
 
                                     # Case 2: ((AB) C) D
                                     for abc_expr, abc in factorial_sqrt_neg(safe_eval(f"({ab} {ops[1]} {c})")):
@@ -121,7 +152,7 @@ def check_combinations_to_ten(numbers):
                                             if result is not None and math.isclose(result, 10, rel_tol=1e-9):
                                                 combination = f"{a_expr} {ops[0]} {bcd2_expr}"
                                                 combinations.append(combination)
-                                            
+
     return combinations
 
 def main():
