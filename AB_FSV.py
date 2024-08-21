@@ -31,7 +31,7 @@ def factorial_sqrt_neg(n):
     options = [(f"{int(n)}" if n.is_integer() else f"{round(n, 1)}", n)]  # Store formatted expression and its value
 
     # Check if n is a valid integer for factorial calculation
-    if n.is_integer() and (n in [0,3,4] or n >= 10):  # Limiting factorial to 0, 3, 4,10+
+    if n.is_integer() and (n in [0,3,4,5,6,7,8,9] or n >= 10):  # Limiting factorial to 0, 3, 4,10+
         n_int = int(n)
         factorial_val = math.factorial(n_int)
         options.append((f"{n_int}!", factorial_val))
@@ -58,6 +58,7 @@ def factorial_sqrt_neg(n):
 def check_combinations_to_ten(numbers):
     operators = ['+', '-', '*', '/', '**']
     combinations = []
+
     for ops in product(operators, repeat=3):
         for a_expr, a in factorial_sqrt_neg(numbers[0]):
             for b_expr, b in factorial_sqrt_neg(numbers[1]):
@@ -70,6 +71,7 @@ def check_combinations_to_ten(numbers):
                         if result is not None and math.isclose(result, 10, rel_tol=1e-9):
                             combination = f"{a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr}"
                             combinations.append(combination)
+
 
                         # Case 1: (AB) (CD)
                         expression_with_parens = f"({a} {ops[0]} {b}) {ops[1]} ({c} {ops[2]} {d})"
@@ -98,9 +100,58 @@ def check_combinations_to_ten(numbers):
                                     expression_with_all_parens = f"({a_expr} {ops[0]} {b_expr}) {ops[1]} ({c_expr} {ops[2]} {d_expr})"
                                     if parentheses_needed(expression_with_parens_and_operations, expression_with_all_parens):
                                         result = safe_eval(expression_with_all_parens)
+
+                        # Apply factorial/sqrt/negative to expressions inside parentheses
+                        for ab_expr, ab in factorial_sqrt_neg(safe_eval(f"{a} {ops[0]} {b}")):
+                            for bc_expr, bc in factorial_sqrt_neg(safe_eval(f"({b} {ops[1]} {c})")):
+                                for cd_expr, cd in factorial_sqrt_neg(safe_eval(f"{c} {ops[2]} {d}")):
+
+                                    # Case 1: (AB) (CD)
+                                    expression_with_parens = f"{ab} {ops[1]} {cd}"
+                                    if parentheses_needed(expression, expression_with_parens):
+                                        result = safe_eval(expression_with_parens)
+
                                         if result is not None and math.isclose(result, 10, rel_tol=1e-9):
                                             combination = f"({ab_expr}) {ops[1]} ({cd_expr})"
                                             combinations.append(combination)
+
+
+                                    # Case 2: ((AB) C) D
+                                    for abc_expr, abc in factorial_sqrt_neg(safe_eval(f"({ab} {ops[1]} {c})")):
+                                        expression_with_parens = f"{abc} {ops[2]} {d}"
+                                        if parentheses_needed(expression, expression_with_parens):
+                                            result = safe_eval(expression_with_parens)
+                                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                                                combination = f"{abc_expr} {ops[2]} {d_expr}"
+                                                combinations.append(combination)
+                        
+                                    
+                                    # Case 3: (A (BC)) D
+                                    for abc2_expr, abc2 in factorial_sqrt_neg(safe_eval(f"({a} {ops[0]} {bc})")):
+                                        expression_with_parens = f"({abc2} {ops[2]} {d}"
+                                        if parentheses_needed(expression, expression_with_parens):
+                                            result = safe_eval(expression_with_parens)
+                                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                                                combination = f"{abc2_expr} {ops[2]} {d_expr}"
+                                                combinations.append(combination)
+
+                                    # Case 4: A ((BC) D)
+                                    for bcd_expr, bcd in factorial_sqrt_neg(safe_eval(f"({bc} {ops[2]} {d})")):
+                                        expression_with_parens = f"{a} {ops[0]} {bcd}"
+                                        if parentheses_needed(expression, expression_with_parens):
+                                            result = safe_eval(expression_with_parens)
+                                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                                                combination = f"{a_expr} {ops[0]} {bcd_expr}"
+                                                combinations.append(combination)
+
+                                    # Case 5: A (B (CD))
+                                    for bcd2_expr, bcd2 in factorial_sqrt_neg(safe_eval(f"({b} {ops[1]} {cd})")):
+                                        expression_with_parens = f"{a} {ops[0]} {bcd2}"
+                                        if parentheses_needed(expression, expression_with_parens):
+                                            result = safe_eval(expression_with_parens)
+                                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                                                combination = f"{a_expr} {ops[0]} {bcd2_expr}"
+                                                combinations.append(combination)
 
     return combinations
 
