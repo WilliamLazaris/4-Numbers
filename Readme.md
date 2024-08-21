@@ -46,9 +46,9 @@
 1611
 
 ### **Basic Operators**
-
+```math
 $A~O_0~B~O_1~C~O_2~D = 10$
-
+```
 $O_0,~O_1,~O_2$   **:**   **+, -, *, /, ^** 
 
 **Possible Combinations:** $5^3 = 125$
