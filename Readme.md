@@ -46,18 +46,18 @@
 1611
 
 ### **Basic Operators**
-```math
-$A~O_0~B~O_1~C~O_2~D = 10$
-```
-$O_0,~O_1,~O_2$   **:**   **+, -, *, /, ^** 
 
-**Possible Combinations:** $5^3 = 125$
+$`A~O_0~B~O_1~C~O_2~D = 10`$
+
+$`O_0,~O_1,~O_2`$   **:**   **+, -, *, /, ^** 
+
+**Possible Combinations:** $`5^3 = 125`$
 
 ### **Factorial and Sqrt**
 
-$(T_AA)~O_0~(T_BB)~O_1~(T_CC)~O_2~(T_DD) = 10$
+$`(T_AA)~O_0~(T_BB)~O_1~(T_CC)~O_2~(T_DD) = 10`$
 
-$T_A,~T_B,~T_C,~T_D:~()!,~\sqrt()$
+$`T_A,~T_B,~T_C,~T_D:~()!,~\sqrt()`$
 
 **Possible Combinations:** $5^3 *3^4=10125$ 
 
