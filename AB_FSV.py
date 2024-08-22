@@ -1,6 +1,30 @@
 import math
 from itertools import product
 
+def main():
+    try:
+        A = float(input("Enter value for A: "))
+        B = float(input("Enter value for B: "))
+        C = float(input("Enter value for C: "))
+        D = float(input("Enter value for D: "))
+
+        numbers = [A, B, C, D]
+        combinations, total_tested = check_combinations_to_ten(numbers)
+        
+        if combinations:
+            print(f"The possible combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10 are:")
+            for combination in combinations:
+                print(combination)
+            print("Total Number of Combinations:",len(combinations))
+        else:
+            print(f"There are no combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10.")
+        
+        print(f"Total Number of Combinations Tested: {total_tested}")
+
+    except ValueError:
+        print("Please enter valid numbers for A, B, C, and D.")
+
+
 def safe_eval(expression):
     try:
         # Prevent overly large results by checking for large exponents
@@ -66,242 +90,243 @@ def check_combinations_to_ten(numbers):
                     for d_expr, d in factorial_sqrt_neg(numbers[3]):                 
                         
                         # Case 0: A B C D 
-                        expression = f"{a} {ops[0]} {b} {ops[1]} {c} {ops[2]} {d}"
-                        total_tested += 1
-                        result = safe_eval(expression)
-
-                        if result is not None:
-                            # Check if the result is close to 10
-                            if math.isclose(result, 10, rel_tol=1e-9):
-                                combination = f"{a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr}"
-                                combinations.append(combination)
-
-                            # Check if sqrt(result) is close to 10 (only for non-negative results)
-                            if result >= 0:
-                                sqrt_result = math.sqrt(result)
-                                if math.isclose(sqrt_result, 10, rel_tol=1e-9):
-                                    combination = f"sqrt({a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr})"
-                                    combinations.append(combination)
+                        case_0(ops, a_expr, b_expr, c_expr, d_expr, a, b, c, d, total_tested, combinations)
+                        expression, total_tested, combinations = case_0(ops, a_expr, b_expr, c_expr, d_expr, a, b, c, d, total_tested, combinations)
 
                         # Case 1: (AB) (CD)
-                        expression_with_parens = f"({a} {ops[0]} {b}) {ops[1]} ({c} {ops[2]} {d})"
-                        total_tested += 1
-                        if parentheses_needed(expression, expression_with_parens):
-                            result = safe_eval(expression_with_parens)
-
-                            if result is not None:
-                                # Evaluate AB and CD sub-expressions
-                                ab_result = safe_eval(f"{a} {ops[0]} {b}")
-                                cd_result = safe_eval(f"{c} {ops[2]} {d}")
-                                
-                                # If AB and CD are valid results, apply factorial_sqrt_neg on them
-                                if ab_result is not None and cd_result is not None:
-                                    ab_options = factorial_sqrt_neg(ab_result)
-                                    cd_options = factorial_sqrt_neg(cd_result)
-
-                                    # Loop through all combinations of AB and CD options
-                                    for ab_expr, ab_val in ab_options:
-                                        for cd_expr, cd_val in cd_options:
-                                            # Create the new expression using AB and CD options
-                                            expression_with_parens = f"({ab_val}) {ops[1]} ({cd_val})"
-                                            total_tested += 1
-                                            result = safe_eval(expression_with_parens)
-
-                                            if result is not None:  # Ensure result is not None before further checks
-                                                                                    
-                                                # Check if result == 10
-                                                if result is not None and math.isclose(result, 10, rel_tol=1e-9):
-                                                    combination = f"({ab_expr}) {ops[1]} ({cd_expr})"
-                                                    combinations.append(combination)
-
-                                                # Check if sqrt(result) == 10 (only for non-negative results)
-                                                if result is not None and result >= 0:
-                                                    sqrt_result = math.sqrt(result)
-                                                    if math.isclose(sqrt_result, 10, rel_tol=1e-9):
-                                                        combination = f"sqrt(({ab_expr}) {ops[1]} ({cd_expr}))"
-                                                        combinations.append(combination)
-
+                        case_1(ops, a, b, c, d, total_tested, combinations, expression)
+                        total_tested, combinations = case_1(ops, a, b, c, d, total_tested, combinations, expression)
 
                         # Case 2: ((AB) C) D
-                        expression_with_parens = f"(({a} {ops[0]} {b}) {ops[1]} {c}) {ops[2]} {d}"
-                        total_tested += 1
-                        if parentheses_needed(expression, expression_with_parens):
-                            result = safe_eval(expression_with_parens)
-
-                            if result is not None:
-                                # Evaluate AB, ABC and CD
-                                ab_result = safe_eval(f"{a} {ops[0]} {b}")
-                                abc_result = safe_eval(f"({a} {ops[0]} {b}) {ops[1]} {c}")
-                                cd_result = safe_eval(f"{c} {ops[2]} {d}")
-
-                                # Apply factorial_sqrt_neg on AB, ABC, and CD
-                                if ab_result is not None and abc_result is not None and cd_result is not None:
-                                    ab_options = factorial_sqrt_neg(ab_result)
-                                    abc_options = factorial_sqrt_neg(abc_result)
-                                    cd_options = factorial_sqrt_neg(cd_result)
-
-                                    # Loop through AB, ABC, and CD options
-                                    for ab_expr, ab_val in ab_options:
-                                        for abc_expr, abc_val in abc_options:
-                                            for cd_expr, cd_val in cd_options:
-                                                expression_with_parens = f"(({ab_val}) {ops[1]} {abc_val}) {ops[2]} {cd_val}"
-                                                total_tested += 1
-                                                result = safe_eval(expression_with_parens)
-
-                                                if result is not None:  # Ensure result is not None before further checks
-
-                                                    # Check if result == 10
-                                                    if result is not None and math.isclose(result, 10, rel_tol=1e-9):
-                                                        combination = f"(({ab_expr}) {ops[1]} {abc_expr}) {ops[2]} {cd_expr}"
-                                                        combinations.append(combination)
-
-                                                    # Check sqrt(result) == 10
-                                                    if result >= 0:
-                                                        sqrt_result = math.sqrt(result)
-                                                        if math.isclose(sqrt_result, 10, rel_tol=1e-9):
-                                                            combination = f"sqrt(({ab_expr}) {ops[1]} {abc_expr}) {ops[2]} {cd_expr})"
-                                                            combinations.append(combination)
-
+                        case_2(ops, a, b, c, d, total_tested, combinations, expression)
+                        total_tested, combinations = case_2(ops, a, b, c, d, total_tested, combinations, expression)
 
                         # Case 3: (A (BC)) D
-                        expression_with_parens = f"({a} {ops[0]} ({b} {ops[1]} {c})) {ops[2]} {d}"
-                        total_tested += 1
-                        if parentheses_needed(expression, expression_with_parens):
-                            result = safe_eval(expression_with_parens)
-
-                            if result is not None:
-                                # Evaluate BC, ABC
-                                bc_result = safe_eval(f"{b} {ops[1]} {c}")
-                                abc_result = safe_eval(f"{a} {ops[0]} ({b} {ops[1]} {c})")
-
-                                # Apply factorial_sqrt_neg on BC, ABC
-                                if bc_result is not None and abc_result is not None:
-                                    bc_options = factorial_sqrt_neg(bc_result)
-                                    abc_options = factorial_sqrt_neg(abc_result)
-
-                                    # Loop through BC and ABC options
-                                    for bc_expr, bc_val in bc_options:
-                                        for abc_expr, abc_val in abc_options:
-                                            expression_with_parens = f"({a} {ops[0]} ({bc_val})) {ops[2]} {abc_val}"
-                                            total_tested += 1
-                                            result = safe_eval(expression_with_parens)
-
-                                            if result is not None:  # Ensure result is not None before further checks
-
-                                                # Check if result == 10
-                                                if result is not None and math.isclose(result, 10, rel_tol=1e-9):
-                                                    combination = f"({a_expr} {ops[0]} ({bc_expr})) {ops[2]} {abc_expr}"
-                                                    combinations.append(combination)
-
-                                                # Check sqrt(result) == 10
-                                                if result >= 0:
-                                                    sqrt_result = math.sqrt(result)
-                                                    if math.isclose(sqrt_result, 10, rel_tol=1e-9):
-                                                        combination = f"sqrt(({a_expr} {ops[0]} ({bc_expr})) {ops[2]} {abc_expr})"
-                                                        combinations.append(combination)
-
+                        case_3(ops, a_expr, a, b, c, d, total_tested, combinations, expression)
+                        total_tested, combinations = case_3(ops, a_expr, a, b, c, d, total_tested, combinations, expression)
 
                         # Case 4: A ((BC) D)
-                        expression_with_parens = f"{a} {ops[0]} (({b} {ops[1]} {c}) {ops[2]} {d})"
-                        total_tested += 1
-                        if parentheses_needed(expression, expression_with_parens):
-                            result = safe_eval(expression_with_parens)
-
-                            if result is not None:
-                                # Evaluate BC, ABC, BCD
-                                bc_result = safe_eval(f"{b} {ops[1]} {c}")
-                                bcd_result = safe_eval(f"({b} {ops[1]} {c}) {ops[2]} {d}")
-
-                                # Apply factorial_sqrt_neg on BC and BCD
-                                if bc_result is not None and bcd_result is not None:
-                                    bc_options = factorial_sqrt_neg(bc_result)
-                                    bcd_options = factorial_sqrt_neg(bcd_result)
-
-                                    # Loop through BC and BCD options
-                                    for bc_expr, bc_val in bc_options:
-                                        for bcd_expr, bcd_val in bcd_options:
-                                            expression_with_parens = f"{a} {ops[0]} (({bc_val}) {ops[2]} {bcd_val})"
-                                            total_tested += 1
-                                            result = safe_eval(expression_with_parens)
-
-                                            if result is not None:  # Ensure result is not None before further checks
-                                                # Check if result == 10
-                                                if result is not None and math.isclose(result, 10, rel_tol=1e-9):
-                                                    combination = f"{a_expr} {ops[0]} (({bc_expr}) {ops[2]} {bcd_expr})"
-                                                    combinations.append(combination)
-
-                                                # Check sqrt(result) == 10
-                                                if result >= 0:
-                                                    sqrt_result = math.sqrt(result)
-                                                    if math.isclose(sqrt_result, 10, rel_tol=1e-9):
-                                                        combination = f"sqrt({a_expr} {ops[0]} (({bc_expr}) {ops[2]} {bcd_expr}))"
-                                                        combinations.append(combination)
-
+                        case_4(ops, a_expr, a, b, c, d, total_tested, combinations, expression)
+                        total_tested, combinations = case_4(ops, a_expr, a, b, c, d, total_tested, combinations, expression)
 
                         # Case 5: A (B (CD))0
-                        expression_with_parens = f"{a} {ops[0]} ({b} {ops[1]} ({c} {ops[2]} {d}))"
-                        total_tested += 1
-                        if parentheses_needed(expression, expression_with_parens):
-                            result = safe_eval(expression_with_parens)
-
-                            if result is not None:
-                                # Evaluate CD, ABC, BCD
-                                cd_result = safe_eval(f"{c} {ops[2]} {d}")
-                                bcd_result = safe_eval(f"{b} {ops[1]} ({c} {ops[2]} {d})")
-
-                                # Apply factorial_sqrt_neg on CD and BCD
-                                if cd_result is not None and bcd_result is not None:
-                                    cd_options = factorial_sqrt_neg(cd_result)
-                                    bcd_options = factorial_sqrt_neg(bcd_result)
-
-                                    # Loop through CD and BCD options
-                                    for cd_expr, cd_val in cd_options:
-                                        for bcd_expr, bcd_val in bcd_options:
-                                            expression_with_parens = f"{a} {ops[0]} ({b} {ops[1]} ({cd_val}))"
-                                            total_tested += 1
-                                            result = safe_eval(expression_with_parens)
-
-                                            if result is not None:  # Ensure result is not None before further checks
-
-                                                # Check if result == 10
-                                                if result is not None and math.isclose(result, 10, rel_tol=1e-9):
-                                                    combination = f"{a_expr} {ops[0]} ({b_expr} {ops[1]} ({cd_expr}))"
-                                                    combinations.append(combination)
-
-                                                # Check sqrt(result) == 10
-                                                if result >= 0:
-                                                    sqrt_result = math.sqrt(result)
-                                                    if math.isclose(sqrt_result, 10, rel_tol=1e-9):
-                                                        combination = f"sqrt({a_expr} {ops[0]} ({b_expr} {ops[1]} ({cd_expr})))"
-                                                        combinations.append(combination)
+                        case_5(ops, a_expr, b_expr, a, b, c, d, total_tested, combinations, expression)
+                        total_tested, combinations = case_5(ops, a_expr, b_expr, a, b, c, d, total_tested, combinations, expression)
 
     return combinations, total_tested
 
-def main():
-    try:
-        A = float(input("Enter value for A: "))
-        B = float(input("Enter value for B: "))
-        C = float(input("Enter value for C: "))
-        D = float(input("Enter value for D: "))
+def case_0(ops, a_expr, b_expr, c_expr, d_expr, a, b, c, d, total_tested, combinations):
+    expression = f"{a} {ops[0]} {b} {ops[1]} {c} {ops[2]} {d}"
+    total_tested += 1
+    result = safe_eval(expression)
 
-        numbers = [A, B, C, D]
-        combinations, total_tested = check_combinations_to_ten(numbers)
-        
-        if combinations:
-            print(f"The possible combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10 are:")
-            for combination in combinations:
-                print(combination)
-            print("Total Number of Combinations:",len(combinations))
-        else:
-            print(f"There are no combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10.")
-        
-        print(f"Total Number of Combinations Tested: {total_tested}")
+    if result is not None:
+        # Check if the result is close to 10
+        if math.isclose(result, 10, rel_tol=1e-9):
+            combination = f"{a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr}"
+            combinations.append(combination)
 
-    except ValueError:
-        print("Please enter valid numbers for A, B, C, and D.")
+        # Check if sqrt(result) is close to 10 (only for non-negative results)
+        if result >= 0:
+            sqrt_result = math.sqrt(result)
+            if math.isclose(sqrt_result, 10, rel_tol=1e-9):
+                combination = f"sqrt({a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr})"
+                combinations.append(combination)
+    return total_tested, combinations
+
+def case_1(ops, a, b, c, d, total_tested, combinations, expression):
+    expression_with_parens = f"({a} {ops[0]} {b}) {ops[1]} ({c} {ops[2]} {d})"
+    total_tested += 1
+    if parentheses_needed(expression, expression_with_parens):
+        result = safe_eval(expression_with_parens)
+
+        if result is not None:
+            # Evaluate AB and CD sub-expressions
+            ab_result = safe_eval(f"{a} {ops[0]} {b}")
+            cd_result = safe_eval(f"{c} {ops[2]} {d}")
+            
+            # If AB and CD are valid results, apply factorial_sqrt_neg on them
+            if ab_result is not None and cd_result is not None:
+                ab_options = factorial_sqrt_neg(ab_result)
+                cd_options = factorial_sqrt_neg(cd_result)
+
+                # Loop through all combinations of AB and CD options
+                for ab_expr, ab_val in ab_options:
+                    for cd_expr, cd_val in cd_options:
+                        # Create the new expression using AB and CD options
+                        expression_with_parens = f"({ab_val}) {ops[1]} ({cd_val})"
+                        total_tested += 1
+                        result = safe_eval(expression_with_parens)
+
+                        if result is not None:  # Ensure result is not None before further checks
+                                                                
+                            # Check if result == 10
+                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                                combination = f"({ab_expr}) {ops[1]} ({cd_expr})"
+                                combinations.append(combination)
+
+                            # Check if sqrt(result) == 10 (only for non-negative results)
+                            if result is not None and result >= 0:
+                                sqrt_result = math.sqrt(result)
+                                if math.isclose(sqrt_result, 10, rel_tol=1e-9):
+                                    combination = f"sqrt(({ab_expr}) {ops[1]} ({cd_expr}))"
+                                    combinations.append(combination)
+    return total_tested, combinations
+
+def case_2(ops, a, b, c, d, total_tested, combinations, expression):
+    expression_with_parens = f"(({a} {ops[0]} {b}) {ops[1]} {c}) {ops[2]} {d}"
+    total_tested += 1
+    if parentheses_needed(expression, expression_with_parens):
+        result = safe_eval(expression_with_parens)
+
+        if result is not None:
+            # Evaluate AB, ABC and CD
+            ab_result = safe_eval(f"{a} {ops[0]} {b}")
+            abc_result = safe_eval(f"({a} {ops[0]} {b}) {ops[1]} {c}")
+            cd_result = safe_eval(f"{c} {ops[2]} {d}")
+
+            # Apply factorial_sqrt_neg on AB, ABC, and CD
+            if ab_result is not None and abc_result is not None and cd_result is not None:
+                ab_options = factorial_sqrt_neg(ab_result)
+                abc_options = factorial_sqrt_neg(abc_result)
+                cd_options = factorial_sqrt_neg(cd_result)
+
+                # Loop through AB, ABC, and CD options
+                for ab_expr, ab_val in ab_options:
+                    for abc_expr, abc_val in abc_options:
+                        for cd_expr, cd_val in cd_options:
+                            expression_with_parens = f"(({ab_val}) {ops[1]} {abc_val}) {ops[2]} {cd_val}"
+                            total_tested += 1
+                            result = safe_eval(expression_with_parens)
+
+                            if result is not None:  # Ensure result is not None before further checks
+
+                                # Check if result == 10
+                                if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                                    combination = f"(({ab_expr}) {ops[1]} {abc_expr}) {ops[2]} {cd_expr}"
+                                    combinations.append(combination)
+
+                                # Check sqrt(result) == 10
+                                if result >= 0:
+                                    sqrt_result = math.sqrt(result)
+                                    if math.isclose(sqrt_result, 10, rel_tol=1e-9):
+                                        combination = f"sqrt(({ab_expr}) {ops[1]} {abc_expr}) {ops[2]} {cd_expr})"
+                                        combinations.append(combination)
+    return total_tested, combinations                      
+
+def case_3(ops, a_expr, a, b, c, d, total_tested, combinations, expression):
+    expression_with_parens = f"({a} {ops[0]} ({b} {ops[1]} {c})) {ops[2]} {d}"
+    total_tested += 1
+    if parentheses_needed(expression, expression_with_parens):
+        result = safe_eval(expression_with_parens)
+
+        if result is not None:
+            # Evaluate BC, ABC
+            bc_result = safe_eval(f"{b} {ops[1]} {c}")
+            abc_result = safe_eval(f"{a} {ops[0]} ({b} {ops[1]} {c})")
+
+            # Apply factorial_sqrt_neg on BC, ABC
+            if bc_result is not None and abc_result is not None:
+                bc_options = factorial_sqrt_neg(bc_result)
+                abc_options = factorial_sqrt_neg(abc_result)
+
+                # Loop through BC and ABC options
+                for bc_expr, bc_val in bc_options:
+                    for abc_expr, abc_val in abc_options:
+                        expression_with_parens = f"({a} {ops[0]} ({bc_val})) {ops[2]} {abc_val}"
+                        total_tested += 1
+                        result = safe_eval(expression_with_parens)
+
+                        if result is not None:  # Ensure result is not None before further checks
+
+                            # Check if result == 10
+                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                                combination = f"({a_expr} {ops[0]} ({bc_expr})) {ops[2]} {abc_expr}"
+                                combinations.append(combination)
+
+                            # Check sqrt(result) == 10
+                            if result >= 0:
+                                sqrt_result = math.sqrt(result)
+                                if math.isclose(sqrt_result, 10, rel_tol=1e-9):
+                                    combination = f"sqrt(({a_expr} {ops[0]} ({bc_expr})) {ops[2]} {abc_expr})"
+                                    combinations.append(combination)
+    return total_tested, combinations
+
+def case_4(ops, a_expr, a, b, c, d, total_tested, combinations, expression):
+    expression_with_parens = f"{a} {ops[0]} (({b} {ops[1]} {c}) {ops[2]} {d})"
+    total_tested += 1
+    if parentheses_needed(expression, expression_with_parens):
+        result = safe_eval(expression_with_parens)
+
+        if result is not None:
+            # Evaluate BC, ABC, BCD
+            bc_result = safe_eval(f"{b} {ops[1]} {c}")
+            bcd_result = safe_eval(f"({b} {ops[1]} {c}) {ops[2]} {d}")
+
+            # Apply factorial_sqrt_neg on BC and BCD
+            if bc_result is not None and bcd_result is not None:
+                bc_options = factorial_sqrt_neg(bc_result)
+                bcd_options = factorial_sqrt_neg(bcd_result)
+
+                # Loop through BC and BCD options
+                for bc_expr, bc_val in bc_options:
+                    for bcd_expr, bcd_val in bcd_options:
+                        expression_with_parens = f"{a} {ops[0]} (({bc_val}) {ops[2]} {bcd_val})"
+                        total_tested += 1
+                        result = safe_eval(expression_with_parens)
+
+                        if result is not None:  # Ensure result is not None before further checks
+                            # Check if result == 10
+                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                                combination = f"{a_expr} {ops[0]} (({bc_expr}) {ops[2]} {bcd_expr})"
+                                combinations.append(combination)
+
+                            # Check sqrt(result) == 10
+                            if result >= 0:
+                                sqrt_result = math.sqrt(result)
+                                if math.isclose(sqrt_result, 10, rel_tol=1e-9):
+                                    combination = f"sqrt({a_expr} {ops[0]} (({bc_expr}) {ops[2]} {bcd_expr}))"
+                                    combinations.append(combination)
+    return total_tested, combinations
+
+def case_5(ops, a_expr, b_expr, a, b, c, d, total_tested, combinations, expression):
+    expression_with_parens = f"{a} {ops[0]} ({b} {ops[1]} ({c} {ops[2]} {d}))"
+    total_tested += 1
+    if parentheses_needed(expression, expression_with_parens):
+        result = safe_eval(expression_with_parens)
+
+        if result is not None:
+            # Evaluate CD, ABC, BCD
+            cd_result = safe_eval(f"{c} {ops[2]} {d}")
+            bcd_result = safe_eval(f"{b} {ops[1]} ({c} {ops[2]} {d})")
+
+            # Apply factorial_sqrt_neg on CD and BCD
+            if cd_result is not None and bcd_result is not None:
+                cd_options = factorial_sqrt_neg(cd_result)
+                bcd_options = factorial_sqrt_neg(bcd_result)
+
+                # Loop through CD and BCD options
+                for cd_expr, cd_val in cd_options:
+                    for bcd_expr, bcd_val in bcd_options:
+                        expression_with_parens = f"{a} {ops[0]} ({b} {ops[1]} ({cd_val}))"
+                        total_tested += 1
+                        result = safe_eval(expression_with_parens)
+
+                        if result is not None:  # Ensure result is not None before further checks
+
+                            # Check if result == 10
+                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                                combination = f"{a_expr} {ops[0]} ({b_expr} {ops[1]} ({cd_expr}))"
+                                combinations.append(combination)
+
+                            # Check sqrt(result) == 10
+                            if result >= 0:
+                                sqrt_result = math.sqrt(result)
+                                if math.isclose(sqrt_result, 10, rel_tol=1e-9):
+                                    combination = f"sqrt({a_expr} {ops[0]} ({b_expr} {ops[1]} ({cd_expr})))"
+                                    combinations.append(combination)
+    return total_tested, combinations
 
 if __name__ == "__main__":
     main()
 
-
-#3! / (-5 + 7) + 7
