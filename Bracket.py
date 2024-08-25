@@ -58,7 +58,6 @@ def factorial_sqrt_neg(n):
 def check_combinations_to_ten(numbers):
     operators = ['+', '-', '*', '/', '**']
     combinations = []
-    total_tested = 0  # Counter for the total combinations tested
     for ops in product(operators, repeat=3):
         for a_expr, a in factorial_sqrt_neg(numbers[0]):
             for b_expr, b in factorial_sqrt_neg(numbers[1]):
@@ -67,15 +66,13 @@ def check_combinations_to_ten(numbers):
                         
                         # Case 0: A B C D 
                         expression = f"{a} {ops[0]} {b} {ops[1]} {c} {ops[2]} {d}"
-                        total_tested += 1
                         result = safe_eval(expression)
                         if result is not None and math.isclose(result, 10, rel_tol=1e-9):
                             combination = f"{a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr}"
-                            combinations.append(combination)                     
+                            combinations.append(combination)
 
                         # Case 1: (AB) (CD)
                         expression_with_parens = f"({a} {ops[0]} {b}) {ops[1]} ({c} {ops[2]} {d})"
-                        total_tested += 1
                         if parentheses_needed(expression, expression_with_parens):
                             result = safe_eval(expression_with_parens)
                             if result is not None and math.isclose(result, 10, rel_tol=1e-9):
@@ -84,7 +81,6 @@ def check_combinations_to_ten(numbers):
                        
                         # Case 2: ((AB) C)  D
                         expression_with_parens = f"(({a} {ops[0]} {b}) {ops[1]} {c}) {ops[2]} {d}"
-                        total_tested += 1
                         if parentheses_needed(expression, expression_with_parens):
                             result = safe_eval(expression_with_parens)
                             if result is not None and math.isclose(result, 10, rel_tol=1e-9):
@@ -93,7 +89,6 @@ def check_combinations_to_ten(numbers):
 
                         # Case 3: (A (BC)) D
                         expression_with_parens = f"({a} {ops[0]} ({b} {ops[1]} {c})) {ops[2]} {d}"
-                        total_tested += 1
                         if parentheses_needed(expression, expression_with_parens):
                             result = safe_eval(expression_with_parens)
                             if result is not None and math.isclose(result, 10, rel_tol=1e-9):
@@ -102,7 +97,6 @@ def check_combinations_to_ten(numbers):
 
                         # Case 4: A ((BC) D)
                         expression_with_parens = f"{a} {ops[0]} (({b} {ops[1]} {c}) {ops[2]} {d})"
-                        total_tested += 1
                         if parentheses_needed(expression, expression_with_parens):
                             result = safe_eval(expression_with_parens)
                             if result is not None and math.isclose(result, 10, rel_tol=1e-9):
@@ -111,14 +105,13 @@ def check_combinations_to_ten(numbers):
 
                         # Case 5: A (B (CD))
                         expression_with_parens = f"{a} {ops[0]} ({b} {ops[1]} ({c} {ops[2]} {d}))"
-                        total_tested += 1
                         if parentheses_needed(expression, expression_with_parens):
                             result = safe_eval(expression_with_parens)
                             if result is not None and math.isclose(result, 10, rel_tol=1e-9):
                                 combination = f"{a_expr} {ops[0]} ({b_expr} {ops[1]} ({c_expr} {ops[2]} {d_expr}))"
                                 combinations.append(combination) 
 
-    return combinations, total_tested
+    return combinations
 
 def main():
     try:
@@ -128,7 +121,8 @@ def main():
         D = float(input("Enter value for D: "))
 
         numbers = [A, B, C, D]
-        combinations, total_tested = check_combinations_to_ten(numbers)
+        combinations = check_combinations_to_ten(numbers)
+        
 
         if combinations:
             print(f"The possible combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10 are:")
@@ -137,9 +131,6 @@ def main():
             print("Total Number of Combinations:",len(combinations))
         else:
             print(f"There are no combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10.")
-        
-        print(f"Total Number of Combinations Tested: {total_tested}")
-
     except ValueError:
         print("Please enter valid numbers for A, B, C, and D.")
 
