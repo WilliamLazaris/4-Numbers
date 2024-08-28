@@ -73,128 +73,129 @@ def check_combinations_to_ten(numbers):
                         
                         # Case 0: A B C D 
                         expression = f"{a} {ops[0]} {b} {ops[1]} {c} {ops[2]} {d}"
-                        # total_tested += 1
-                        result = safe_eval(expression)
+                        total_tested += 1
+                        # result = safe_eval(expression)
+                        result = expression
+
 
                         if result is not None:
                             # Check if the result is close to 10
-                            if math.isclose(result, 10, rel_tol=1e-9):
-                                combination = f"{a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr}"
-                                combinations.append(combination)
-                                total_tested += 1
+                            # if math.isclose(result, 10, rel_tol=1e-9):
+                            combination = f"{a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr}"
+                            combinations.append(combination)
 
                             # Check if sqrt(result) is close to 10 (only for non-negative results)
                             #if result >= 0:
-                                sqrt_result = math.sqrt(result)
-                                if math.isclose(sqrt_result, 10, rel_tol=1e-9):
-                                    combination = f"sqrt({a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr})"
-                                    combinations.append(combination)
-                                    total_tested += 1
+                            sqrt_result = math.sqrt(result)
+                            total_tested += 1
+                            # if math.isclose(sqrt_result, 10, rel_tol=1e-9):
+                            combination = f"sqrt({a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr})"
+                            combinations.append(combination)
 
                         # Case 1: (AB) (CD)
                         expression_with_parens = f"({a} {ops[0]} {b}) {ops[1]} ({c} {ops[2]} {d})"
-                        # total_tested += 1
+                        total_tested += 1
                         #if parentheses_needed(expression, expression_with_parens):
-                        result = safe_eval(expression_with_parens)
+                        # result = safe_eval(expression_with_parens)
+                        result = expression
 
                         if result is not None:
                             # Check if result == 10
-                            if math.isclose(result, 10, rel_tol=1e-9):
-                                combination = f"({a_expr} {ops[0]} {b_expr}) {ops[1]} ({c_expr} {ops[2]} {d_expr})"
-                                combinations.append(combination)
-                                total_tested += 1
+                            # if math.isclose(result, 10, rel_tol=1e-9):
+                            combination = f"({a_expr} {ops[0]} {b_expr}) {ops[1]} ({c_expr} {ops[2]} {d_expr})"
+                            combinations.append(combination)
 
                             # Check if sqrt(result) == 10 (only for non-negative results)
                             #if result >= 0:
-                                sqrt_result = math.sqrt(result)
-                                if math.isclose(sqrt_result, 10, rel_tol=1e-9):
-                                    combination = f"sqrt(({a_expr} {ops[0]} {b_expr}) {ops[1]} ({c_expr} {ops[2]} {d_expr}))"
-                                    combinations.append(combination)
-                                    total_tested += 1
+                            sqrt_result = math.sqrt(result)
+                            total_tested += 1
+                            # if math.isclose(sqrt_result, 10, rel_tol=1e-9):
+                            combination = f"sqrt(({a_expr} {ops[0]} {b_expr}) {ops[1]} ({c_expr} {ops[2]} {d_expr}))"
+                            combinations.append(combination)
 
                         # Case 2: ((AB) C) D
                         expression_with_parens = f"(({a} {ops[0]} {b}) {ops[1]} {c}) {ops[2]} {d}"
-                        # total_tested += 1
+                        total_tested += 1
                         #if parentheses_needed(expression, expression_with_parens):
-                        result = safe_eval(expression_with_parens)
+                        # result = safe_eval(expression_with_parens)
+                        result = expression
 
                         if result is not None:
                             # Check if result == 10
-                            if math.isclose(result, 10, rel_tol=1e-9):
-                                combination = f"(({a_expr} {ops[0]} {b_expr}) {ops[1]} {c_expr}) {ops[2]} {d_expr}"
-                                combinations.append(combination)
-                                total_tested += 1
+                            #if math.isclose(result, 10, rel_tol=1e-9):
+                            combination = f"(({a_expr} {ops[0]} {b_expr}) {ops[1]} {c_expr}) {ops[2]} {d_expr}"
+                            combinations.append(combination)
 
                             # Check if sqrt(result) == 10 (only for non-negative results)
                             #if result >= 0:
-                                sqrt_result = math.sqrt(result)
-                                if math.isclose(sqrt_result, 10, rel_tol=1e-9):
-                                    combination = f"sqrt((({a_expr} {ops[0]} {b_expr}) {ops[1]} {c_expr}) {ops[2]} {d_expr})"
-                                    combinations.append(combination)
-                                    total_tested += 1
+                            sqrt_result = math.sqrt(result)
+                            total_tested += 1
+                            # if math.isclose(sqrt_result, 10, rel_tol=1e-9):
+                            combination = f"sqrt((({a_expr} {ops[0]} {b_expr}) {ops[1]} {c_expr}) {ops[2]} {d_expr})"
+                            combinations.append(combination)
 
                         # Case 3: (A (BC)) D
                         expression_with_parens = f"({a} {ops[0]} ({b} {ops[1]} {c})) {ops[2]} {d}"
-                        # total_tested += 1
+                        total_tested += 1
                         #if parentheses_needed(expression, expression_with_parens):
-                        result = safe_eval(expression_with_parens)
+                        # result = safe_eval(expression_with_parens)
+                        result = expression
 
                         if result is not None:
                             # Check if result == 10
-                            if math.isclose(result, 10, rel_tol=1e-9):
-                                combination = f"({a_expr} {ops[0]} ({b_expr} {ops[1]} {c_expr})) {ops[2]} {d_expr}"
-                                combinations.append(combination)
-                                total_tested += 1
+                            # if math.isclose(result, 10, rel_tol=1e-9):
+                            combination = f"({a_expr} {ops[0]} ({b_expr} {ops[1]} {c_expr})) {ops[2]} {d_expr}"
+                            combinations.append(combination)
 
                             # Check if sqrt(result) == 10 (only for non-negative results)
                             #if result >= 0:
-                                sqrt_result = math.sqrt(result)
-                                if math.isclose(sqrt_result, 10, rel_tol=1e-9):
-                                    combination = f"sqrt(({a_expr} {ops[0]} ({b_expr} {ops[1]} {c_expr})) {ops[2]} {d_expr})"
-                                    combinations.append(combination)
-                                    total_tested += 1
+                            sqrt_result = math.sqrt(result)
+                            total_tested += 1
+                            # if math.isclose(sqrt_result, 10, rel_tol=1e-9):
+                            combination = f"sqrt(({a_expr} {ops[0]} ({b_expr} {ops[1]} {c_expr})) {ops[2]} {d_expr})"
+                            combinations.append(combination)
 
                         # Case 4: A ((BC) D)
                         expression_with_parens = f"{a} {ops[0]} (({b} {ops[1]} {c}) {ops[2]} {d})"
-                        # total_tested += 1
+                        total_tested += 1
                         #if parentheses_needed(expression, expression_with_parens):
-                        result = safe_eval(expression_with_parens)
+                        # result = safe_eval(expression_with_parens)
+                        result = expression
 
                         if result is not None:
                             # Check if result == 10
-                            if math.isclose(result, 10, rel_tol=1e-9):
-                                combination = f"{a_expr} {ops[0]} (({b_expr} {ops[1]} {c_expr}) {ops[2]} {d_expr})"
-                                combinations.append(combination)
-                                total_tested += 1
+                            # if math.isclose(result, 10, rel_tol=1e-9):
+                            combination = f"{a_expr} {ops[0]} (({b_expr} {ops[1]} {c_expr}) {ops[2]} {d_expr})"
+                            combinations.append(combination)
 
                             # Check if sqrt(result) == 10 (only for non-negative results)
                             #if result >= 0:
-                                sqrt_result = math.sqrt(result)
-                                if math.isclose(sqrt_result, 10, rel_tol=1e-9):
-                                    combination = f"sqrt({a_expr} {ops[0]} (({b_expr} {ops[1]} {c_expr}) {ops[2]} {d_expr}))"
-                                    combinations.append(combination)
-                                    total_tested += 1
+                            sqrt_result = math.sqrt(result)
+                            total_tested += 1
+                            # if math.isclose(sqrt_result, 10, rel_tol=1e-9):
+                            combination = f"sqrt({a_expr} {ops[0]} (({b_expr} {ops[1]} {c_expr}) {ops[2]} {d_expr}))"
+                            combinations.append(combination)
 
                         # Case 5: A (B (CD))
                         expression_with_parens = f"{a} {ops[0]} ({b} {ops[1]} ({c} {ops[2]} {d}))"
-                        # total_tested += 1
+                        total_tested += 1
                         #if parentheses_needed(expression, expression_with_parens):
-                        result = safe_eval(expression_with_parens)
+                        # result = safe_eval(expression_with_parens)
+                        result = expression
 
                         if result is not None:
                             # Check if result == 10
-                            if math.isclose(result, 10, rel_tol=1e-9):
-                                combination = f"{a_expr} {ops[0]} ({b_expr} {ops[1]} ({c_expr} {ops[2]} {d_expr}))"
-                                combinations.append(combination)
-                                total_tested += 1
+                            # if math.isclose(result, 10, rel_tol=1e-9):
+                            combination = f"{a_expr} {ops[0]} ({b_expr} {ops[1]} ({c_expr} {ops[2]} {d_expr}))"
+                            combinations.append(combination)
 
                             # Check if sqrt(result) == 10 (only for non-negative results)
                             #if result >= 0:
-                                sqrt_result = math.sqrt(result)
-                                if math.isclose(sqrt_result, 10, rel_tol=1e-9):
-                                    combination = f"sqrt({a_expr} {ops[0]} ({b_expr} {ops[1]} ({c_expr} {ops[2]} {d_expr})))"
-                                    combinations.append(combination)
-                                    total_tested += 1
+                            sqrt_result = math.sqrt(result)
+                            total_tested += 1
+                            # if math.isclose(sqrt_result, 10, rel_tol=1e-9):
+                            combination = f"sqrt({a_expr} {ops[0]} ({b_expr} {ops[1]} ({c_expr} {ops[2]} {d_expr})))"
+                            combinations.append(combination)
 
     return combinations, total_tested
 
@@ -209,13 +210,13 @@ def main():
         combinations, total_tested = check_combinations_to_ten(numbers)
         
 
-        if combinations:
-            print(f"The possible combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10 are:")
-            for combination in combinations:
-                print(combination)
-            print("Total Number of Combinations:",len(combinations))
-        else:
-            print(f"There are no combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10.")
+        # if combinations:
+        #     print(f"The possible combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10 are:")
+        #     #for combination in combinations:
+        #         #print(combination)
+        #     print("Total Number of Combinations:",len(combinations))
+        # else:
+        #     print(f"There are no combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10.")
         
         print(f"Total Number of Combinations Tested: {total_tested}")
 
