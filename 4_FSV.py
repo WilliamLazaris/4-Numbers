@@ -47,18 +47,20 @@ def factorial_or_sqrt(n):
 def check_combinations_to_ten(numbers):
     operators = ['+', '-', '*', '/', '**']
     combinations = []
+    total_combinations = 0 
     for ops in product(operators, repeat=3):
         for a_expr, a in factorial_or_sqrt(numbers[0]):
             for b_expr, b in factorial_or_sqrt(numbers[1]):
                 for c_expr, c in factorial_or_sqrt(numbers[2]):
                     for d_expr, d in factorial_or_sqrt(numbers[3]):
                         expression = f"{a} {ops[0]} {b} {ops[1]} {c} {ops[2]} {d}"
+                        total_combinations += 1
                         #print(f"Trying expression: {expression}")  # Debug statement
                         result = safe_eval(expression)
                         if result is not None and math.isclose(result, 10, rel_tol=1e-9):
                             combination = f"{a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr}"
                             combinations.append(combination)
-    return combinations
+    return combinations, total_combinations
 
 def main():
     try:
@@ -68,7 +70,7 @@ def main():
         D = float(input("Enter value for D: "))
 
         numbers = [A, B, C, D]
-        combinations = check_combinations_to_ten(numbers)
+        combinations, total_combinations = check_combinations_to_ten(numbers)
         
         if combinations:
             print(f"The possible combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10 are:")
@@ -76,6 +78,9 @@ def main():
                 print(combination)
         else:
             print(f"There are no combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10.")
+        
+        print(f"Total Number of Combinations Tested: {total_combinations}")
+
     except ValueError:
         print("Please enter valid numbers for A, B, C, and D.")
 
