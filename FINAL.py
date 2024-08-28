@@ -24,7 +24,6 @@ def main():
     except ValueError:
         print("Please enter valid numbers for A, B, C, and D.")
 
-
 def safe_eval(expression):
     try:
         # Prevent overly large results by checking for large exponents
