@@ -20,24 +20,29 @@ def factorial_or_sqrt(n):
     options = [(f"{int(n)}" if n.is_integer() else f"{round(n, 1)}", n)]  # Store formatted expression and its value
 
     # Check if n is a valid integer for factorial calculation
-    if n.is_integer() and n >= 0 and n <= 10:  # Limiting factorial to 0 through 10
-        n_int = int(n)
-        factorial_val = math.factorial(n_int)
-        options.append((f"{n_int}!", factorial_val))
-        options.append((f"-{n_int}!", -factorial_val))
+    #if n.is_integer() and n >= 0 and n <= 10:  # Limiting factorial to 0 through 10
+    n_int = int(n)
+    factorial_val = math.factorial(n_int)
+    options.append((f"{n_int}!", factorial_val))
+    options.append((f"-{n_int}!", -factorial_val))
+
+    factorial_int = int(factorial_val)
+    sqrt_factorial_val = math.sqrt(factorial_int)
+    options.append((f"sqrt({n_int}!)", sqrt_factorial_val))
+    options.append((f"-sqrt({n_int}!)", -sqrt_factorial_val))
 
     # Check if n is non-negative for square root calculation
-    if n >= 0:
-        sqrt_val = math.sqrt(n)
-        options.append((f"sqrt({int(n)})", sqrt_val))
-        options.append((f"-sqrt({int(n)})", -sqrt_val))
+    #if n >= 0:
+    sqrt_val = math.sqrt(n)
+    options.append((f"sqrt({int(n)})", sqrt_val))
+    options.append((f"-sqrt({int(n)})", -sqrt_val))
 
         # Factorial of the square root if the square root is an integer
-        if sqrt_val.is_integer() and sqrt_val >= 0 and sqrt_val <= 10:  # Limiting factorial for square root values
-            sqrt_int = int(sqrt_val)
-            factorial_sqrt_val = math.factorial(sqrt_int)
-            options.append((f"(sqrt({int(n)}))!", factorial_sqrt_val))
-            options.append((f"-((sqrt({int(n)}))!)", -factorial_sqrt_val))
+        #if sqrt_val.is_integer() and sqrt_val >= 0 and sqrt_val <= 10:  # Limiting factorial for square root values
+    sqrt_int = int(sqrt_val)
+    factorial_sqrt_val = math.factorial(sqrt_int)
+    options.append((f"(sqrt({int(n)}))!", factorial_sqrt_val))
+    options.append((f"-((sqrt({int(n)}))!)", -factorial_sqrt_val))
 
     # Add negative version of the number
     options.append((f"-{int(n)}" if n.is_integer() else f"-{round(n, 1)}", -n))

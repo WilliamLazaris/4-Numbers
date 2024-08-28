@@ -71,7 +71,7 @@ $`(\pm A)~O_0~(\pm B)~O_1~(\pm C)~O_2~(\pm D) = 10`$
 
 $`(\pm T_AA)~O_0~(\pm T_BB)~O_1~(\pm T_CC)~O_2~(\pm T_DD) = 10`$
 
-**Possible Combinations:** $`5^3*3^4*2^4=162000`$ 
+**Possible Combinations:** $`5^3*5^4*2^4=1~250~000`$ 
 
 ### **Brackets**
 
@@ -79,39 +79,39 @@ $`(\pm T_AA)~O_0~(\pm T_BB)~O_1~(\pm T_CC)~O_2~(\pm T_DD) = 10`$
 
 $`(\pm T_AA)~O_0~(\pm T_BB)~O_1~(\pm T_CC)~O_2~(\pm T_DD) = 10`$
 
-**Possible Combinations:** $`5^3*3^4*2^4=162000`$ 
+**Possible Combinations:** $`5^3*5^4*2^4=1~250~000`$ 
 
 *Case 1:  (AB)(CD)*
 
 $`\bigl ((\pm T_AA)~O_0~(\pm T_BB)\bigl )~O_1~\bigl ((\pm T_CC)~O_2~(\pm T_DD)\bigl ) = 10`$
 
-**Possible Combinations:** $`5^3*3^4*2^4=162000`$ 
+**Possible Combinations:** $`5^3*5^4*2^4=1~250~000`$ 
 
 *Case 2:  ((AB)C)D*
 
 $`\Bigl(\bigl((\pm T_AA)~O_0~(\pm T_BB)\bigl)~O_1~(\pm T_CC)\Bigl)~O_2~(\pm T_DD) = 10`$
 
-**Possible Combinations:** $`5^3*3^4*2^4=162000`$ 
+**Possible Combinations:** $`5^3*5^4*2^4=1~250~000`$ 
 
 *Case 3: (A(BC))D*
 
 $`\Bigl((\pm T_AA)~O_0~\bigl((\pm T_BB)~O_1~(\pm T_CC)\bigl)\Bigl)~O_2~(\pm T_DD) = 10`$
 
-**Possible Combinations:** $`5^3*3^4*2^4=162000`$ 
+**Possible Combinations:** $`5^3*5^4*2^4=1~250~000`$ 
 
 *Case 4:  A((BC)D)*
 
 $`(\pm T_AA)~O_0~\Bigl(\bigl((\pm T_BB)~O_1~(\pm T_CC)\bigl)~O_2~(\pm T_DD)\Bigl) = 10`$
 
-**Possible Combinations:** $`5^3*3^4*2^4=162000`$ 
+**Possible Combinations:** $`5^3*5^4*2^4=1~250~000`$ 
 
 *Case 5:  A(B(CD))*
 
 $`(\pm T_AA)~O_0~\Bigl((\pm T_BB)~O_1~\bigl((\pm T_CC)~O_2~(\pm T_DD)\bigl)\Bigl) = 10`$
 
-**Possible Combinations:** $`5^3*3^4*2^4=162000`$ 
+**Possible Combinations:** $`5^3*5^4*2^4=1~250~000`$ 
 
-**Total Combinations: $`6*(5^3*3^4*2^4)= 972000`$**
+**Total Combinations: $`6*(5^3*5^4*2^4)= 7~500~000`$**
 
 ### **AB/ABC/ABCD FSV**
 
