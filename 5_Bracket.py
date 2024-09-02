@@ -30,7 +30,10 @@ def parentheses_needed(expression_without_parens, expression_with_parens):
 
 def factorial_sqrt_neg(n):
     options = [(f"{int(n)}" if n.is_integer() else f"{round(n, 1)}", n)]  # Store formatted expression and its value
-
+    # Add negative version of the number
+    options.append((f"-{int(n)}" if n.is_integer() else f"-{round(n, 1)}", -n))
+    
+    
     # Check if n is a valid integer for factorial calculation
     #if n.is_integer() and (n in [0,3,4,5,6] or n >= 10):  # Limiting factorial to 0, 3, 4,10+
     n_int = int(n)
@@ -40,8 +43,8 @@ def factorial_sqrt_neg(n):
 
     factorial_int = int(factorial_val)
     sqrt_factorial_val = math.sqrt(factorial_int)
-    options.append((f"sqrt({n_int}!)", sqrt_factorial_val))
-    options.append((f"-sqrt({n_int}!)", -sqrt_factorial_val))
+    options.append((f"sqrt({factorial_int}!)", sqrt_factorial_val))
+    options.append((f"-sqrt({factorial_int}!)", -sqrt_factorial_val))
 
     # Check if n is non-negative for square root calculation
     #if n in [4,9,16,25,36,49,64,81,100] or n > 100:
@@ -49,15 +52,15 @@ def factorial_sqrt_neg(n):
     options.append((f"sqrt({int(n)})", sqrt_val))
     options.append((f"-sqrt({int(n)})", -sqrt_val))
 
-        # Factorial of the square root if the square root is an integer
-        #if sqrt_val.is_integer() and (sqrt_val in [0,3,4,5,6] or sqrt_val >= 10):  # Limiting factorial for square root values
-    sqrt_int = int(sqrt_val)
-    factorial_sqrt_val = math.factorial(sqrt_int)
-    options.append((f"(sqrt({int(n)}))!", factorial_sqrt_val))
-    options.append((f"-((sqrt({int(n)}))!)", -factorial_sqrt_val))
-
-    # Add negative version of the number
-    options.append((f"-{int(n)}" if n.is_integer() else f"-{round(n, 1)}", -n))
+    # Factorial of the square root if the square root is an integer
+    #if sqrt_val.is_integer() and (sqrt_val in [0,3,4,5,6] or sqrt_val >= 10):  # Limiting factorial for square root values
+    sqrt_float = sqrt_val
+    if sqrt_float.is_integer():
+        factorial_sqrt_val = math.factorial(int(sqrt_float))
+    else:
+        factorial_sqrt_val = sqrt_float
+    options.append((f"(sqrt({sqrt_float}))!", factorial_sqrt_val))
+    options.append((f"-((sqrt({sqrt_float}))!)", -factorial_sqrt_val))
 
     return options
 
@@ -75,54 +78,60 @@ def check_combinations_to_ten(numbers):
                         expression = f"{a} {ops[0]} {b} {ops[1]} {c} {ops[2]} {d}"
                         total_tested += 1
                         result = safe_eval(expression)
-                        if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                        # if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                        if result is not None and result == 10:  # Checking for exact equality
                             combination = f"{a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr}"
                             combinations.append(combination)
 
                         # Case 1: (AB) (CD)
                         expression_with_parens = f"({a} {ops[0]} {b}) {ops[1]} ({c} {ops[2]} {d})"
                         total_tested += 1
-                        if parentheses_needed(expression, expression_with_parens):
-                            result = safe_eval(expression_with_parens)
-                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
-                                combination = f"({a_expr} {ops[0]} {b_expr}) {ops[1]} ({c_expr} {ops[2]} {d_expr})"
-                                combinations.append(combination)
-                       
+                        # if parentheses_needed(expression, expression_with_parens):
+                        result = safe_eval(expression_with_parens)
+                        # if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                        if result is not None and result == 10:  # Checking for exact equality
+                            combination = f"({a_expr} {ops[0]} {b_expr}) {ops[1]} ({c_expr} {ops[2]} {d_expr})"
+                            combinations.append(combination)
+                    
                         # Case 2: ((AB) C)  D
                         expression_with_parens = f"(({a} {ops[0]} {b}) {ops[1]} {c}) {ops[2]} {d}"
                         total_tested += 1
-                        if parentheses_needed(expression, expression_with_parens):
-                            result = safe_eval(expression_with_parens)
-                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
-                                combination = f"(({a_expr} {ops[0]} {b_expr}) {ops[1]} {c_expr}) {ops[2]} {d_expr}"
-                                combinations.append(combination)
+                        # if parentheses_needed(expression, expression_with_parens):
+                        result = safe_eval(expression_with_parens)
+                        # if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                        if result is not None and result == 10:  # Checking for exact equality
+                            combination = f"(({a_expr} {ops[0]} {b_expr}) {ops[1]} {c_expr}) {ops[2]} {d_expr}"
+                            combinations.append(combination)
 
                         # Case 3: (A (BC)) D
                         expression_with_parens = f"({a} {ops[0]} ({b} {ops[1]} {c})) {ops[2]} {d}"
                         total_tested += 1
-                        if parentheses_needed(expression, expression_with_parens):
-                            result = safe_eval(expression_with_parens)
-                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
-                                combination = f"({a_expr} {ops[0]} ({b_expr} {ops[1]} {c_expr})) {ops[2]} {d_expr}"
-                                combinations.append(combination)
+                        # if parentheses_needed(expression, expression_with_parens):
+                        result = safe_eval(expression_with_parens)
+                        #if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                        if result is not None and result == 10:  # Checking for exact equality
+                            combination = f"({a_expr} {ops[0]} ({b_expr} {ops[1]} {c_expr})) {ops[2]} {d_expr}"
+                            combinations.append(combination)
 
                         # Case 4: A ((BC) D)
                         expression_with_parens = f"{a} {ops[0]} (({b} {ops[1]} {c}) {ops[2]} {d})"
                         total_tested += 1
-                        if parentheses_needed(expression, expression_with_parens):
-                            result = safe_eval(expression_with_parens)
-                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
-                                combination = f"{a_expr} {ops[0]} (({b_expr} {ops[1]} {c_expr}) {ops[2]} {d_expr})"
-                                combinations.append(combination)
+                        # if parentheses_needed(expression, expression_with_parens):
+                        result = safe_eval(expression_with_parens)
+                        # if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                        if result is not None and result == 10:  # Checking for exact equality
+                            combination = f"{a_expr} {ops[0]} (({b_expr} {ops[1]} {c_expr}) {ops[2]} {d_expr})"
+                            combinations.append(combination)
 
                         # Case 5: A (B (CD))
                         expression_with_parens = f"{a} {ops[0]} ({b} {ops[1]} ({c} {ops[2]} {d}))"
                         total_tested += 1
-                        if parentheses_needed(expression, expression_with_parens):
-                            result = safe_eval(expression_with_parens)
-                            if result is not None and math.isclose(result, 10, rel_tol=1e-9):
-                                combination = f"{a_expr} {ops[0]} ({b_expr} {ops[1]} ({c_expr} {ops[2]} {d_expr}))"
-                                combinations.append(combination) 
+                        # if parentheses_needed(expression, expression_with_parens):
+                        result = safe_eval(expression_with_parens)
+                        # if result is not None and math.isclose(result, 10, rel_tol=1e-9):
+                        if result is not None and result == 10:  # Checking for exact equality
+                            combination = f"{a_expr} {ops[0]} ({b_expr} {ops[1]} ({c_expr} {ops[2]} {d_expr}))"
+                            combinations.append(combination) 
 
     return combinations, total_tested
 
