@@ -33,7 +33,6 @@ def factorial_sqrt_neg(n):
     # Add negative version of the number
     options.append((f"-{int(n)}" if n.is_integer() else f"-{round(n, 1)}", -n))
     
-    
     # Check if n is a valid integer for factorial calculation
     #if n.is_integer() and (n in [0,3,4,5,6] or n >= 10):  # Limiting factorial to 0, 3, 4,10+
     n_int = int(n)
