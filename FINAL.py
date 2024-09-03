@@ -5,6 +5,7 @@ from itertools import product
 total_tested = 0  # Counter for the total combinations tested
 
 def safe_eval(expression):
+    global total_tested
     try:
         # Prevent overly large results by checking for large exponents
         if "**" in expression:
@@ -16,7 +17,9 @@ def safe_eval(expression):
         
         return eval(expression)
     except (ZeroDivisionError, OverflowError, ValueError, SyntaxError) as e:
-        print(f"Error evaluating expression '{expression}': {e}")
+        # print(f"Error evaluating expression '{expression}': {e}")
+        total_tested += 1
+        # print(total_tested)
         return None
 
 def parentheses_needed(expression_without_parens, expression_with_parens):
@@ -50,8 +53,10 @@ def factorial_sqrt_neg(str_n, n):
             options.append((f"-sqrt({str_n}!)", -sqrt_factorial_val))
         else:
             total_tested += 1
+            # print (total_tested)
     else:
         total_tested += 1
+        # print(total_tested)
 
     # Check if n is non-negative for square root calculation
     if n in [4,9,16,25,36,49,64,81,100,144,169,196,225]:
@@ -72,8 +77,10 @@ def factorial_sqrt_neg(str_n, n):
         
         else:
             total_tested += 1
+            # print(total_tested)
     else:
         total_tested += 1
+        # print(total_tested)
     
     return options
 
@@ -87,6 +94,8 @@ def check_combinations_to_ten(numbers, str_numbers):
                 for c_expr, c in factorial_sqrt_neg(str_numbers[2],numbers[2]):
                     for d_expr, d in factorial_sqrt_neg(str_numbers[3],numbers[3]):                 
                         
+                        print(total_tested)
+
                         # Case 0: A B C D 
                         expression = f"{a} {ops[0]} {b} {ops[1]} {c} {ops[2]} {d}"
                         combination = f"{a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr}"
@@ -103,8 +112,15 @@ def check_combinations_to_ten(numbers, str_numbers):
                         c = float(c)
                         d = float(d)
                         ab_expression = f"{a} {ops[0]} {b}"
+                        total_tested += 1
+                        # print(total_tested)
                         bc_expression = f"{b} {ops[1]} {d}"
+                        total_tested += 1
+                        # print(total_tested)
                         cd_expression = f"{c} {ops[2]} {d}"
+                        total_tested += 1
+                        # print(total_tested)
+
                         # print(f"Evaluating AB: {ab_expression} -> {ab_result}")
                         # print(f"Evaluating CD: {cd_expression} -> {cd_result}")
                         ab_combination = f"({a_expr} {ops[0]} {b_expr})" 
@@ -125,7 +141,7 @@ def check_combinations_to_ten(numbers, str_numbers):
                                         expression_with_parens = f"{ab} {ops[1]} {cd}"
                                         combination = f"{ab_expr} {ops[1]} {cd_expr}"
                                         total_tested += 1
-                                        print(total_tested)
+                                        # print(total_tested)
                                         # print(f"Combining: {ab_expr} {ops[1]} {cd_expr} -> {expression_with_parens}")
                                         # Evaluate the expression and check if it equals 10 or sqrt(100)
                                         result = safe_eval(expression_with_parens)                  
@@ -140,9 +156,17 @@ def check_combinations_to_ten(numbers, str_numbers):
                                         cd = float(cd)
                                         
                                         abC_expression = f"{ab} {ops[1]} {c}"
+                                        total_tested += 1
+                                        # print(total_tested)
                                         Abc_expression = f"{a} {ops[0]} {bc}"
+                                        total_tested += 1
+                                        # print(total_tested)
                                         bcD_expression = f"{bc} {ops[2]} {d}"
+                                        total_tested += 1
+                                        # print(total_tested)
                                         Bcd_expression = f"{b} {ops[1]} {cd}"
+                                        total_tested += 1
+                                        # print(total_tested)
                                         
                                         abC_combination = f"({ab_expr} {ops[1]} {c_expr})"
                                         Abc_combination = f"({a_expr} {ops[0]} {bc_expr})"
@@ -161,6 +185,7 @@ def check_combinations_to_ten(numbers, str_numbers):
                                                 expression_with_parens = f"{abC} {ops[2]} {d}"
                                                 combination = f"{abC_expr} {ops[2]} {d_expr}"
                                                 total_tested += 1
+                                                # print(total_tested)
                                                 #if parentheses_needed(expression, expression_with_parens):
                                                 result = safe_eval(expression_with_parens)
                                                 if result is not None and result == 10:  # Checking for exact equality
@@ -174,6 +199,7 @@ def check_combinations_to_ten(numbers, str_numbers):
                                                 expression_with_parens = f"{Abc} {ops[2]} {d}"
                                                 combination = f"{Abc_expr} {ops[2]} {d_expr}"
                                                 total_tested += 1
+                                                # print(total_tested)
                                                 #if parentheses_needed(expression, expression_with_parens):
                                                 result = safe_eval(expression_with_parens)
                                                 if result is not None and result == 10:  # Checking for exact equality
@@ -187,6 +213,7 @@ def check_combinations_to_ten(numbers, str_numbers):
                                                 expression_with_parens = f"{a} {ops[0]} {bcD}"
                                                 combination = f"{a_expr} {ops[0]} {bcD_expr}"                       
                                                 total_tested += 1
+                                                # print(total_tested)
                                                 #if parentheses_needed(expression, expression_with_parens):
                                                 result = safe_eval(expression_with_parens)
                                                 if result is not None and result == 10:  # Checking for exact equality
@@ -200,6 +227,7 @@ def check_combinations_to_ten(numbers, str_numbers):
                                                 expression_with_parens = f"{a} {ops[0]} {Bcd}"
                                                 combination = f"{a_expr} {ops[0]} {Bcd_expr}"                       
                                                 total_tested += 1
+                                                # print(total_tested)
                                                 #if parentheses_needed(expression, expression_with_parens):
                                                 result = safe_eval(expression_with_parens)
                                                 if result is not None and result == 10:  # Checking for exact equality
