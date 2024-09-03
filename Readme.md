@@ -153,7 +153,7 @@ $`T_{ABCD=100}\biggl((\pm T_AA)~O_0~\pm T_{BCD}\Bigl((\pm T_BB)~O_1~\pm T_{CD}\b
 
 **Total Combinations: $`5*(5^3*5^6*2^6*2) + (5^3*5^4*2^4*2) = 1~252~500~000`$**
 
-***With 10, 000 Number Combos:*  586 440 000 000**
+***With 10, 000 Number Combos:*  12 525 000 000 000**
 
 # App Development:
 
