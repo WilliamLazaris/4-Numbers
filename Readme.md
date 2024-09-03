@@ -119,39 +119,39 @@ $`(\pm T_AA)~O_0~\Bigl((\pm T_BB)~O_1~\bigl((\pm T_CC)~O_2~(\pm T_DD)\bigl)\Bigl
 
 $`T_{ABCD=100}\Bigl((\pm T_AA)~O_0~(\pm T_BB)~O_1~(\pm T_CC)~O_2~(\pm T_DD)\Bigl) = 10`$
 
-**Possible Combinations:** $`5^3*3^4*2^4*2=324~000`$ 
+**Possible Combinations:** $`5^3*5^4*2^4*2=2~500~000`$ 
 
 *Case 1:  (AB)(CD)*
 
 $`T_{ABCD=100}\Bigl(\pm T_{AB}\bigl ((\pm T_AA)~O_0~(\pm T_BB)\bigl )~O_1~\pm T_{CD}\bigl ((\pm T_CC)~O_2~(\pm T_DD)\bigl)\Bigl) = 10`$
 
-**Possible Combinations:** $`5^3*3^6*2^6*2=11~664~000`$ 
+**Possible Combinations:** $`5^3*5^6*2^6*2=250~000~000`$  
 
 *Case 2:  ((AB)C)D*
 
 $`T_{ABCD=100}\biggl(\pm T_{ABC}\Bigl(\pm T_{AB}\bigl((\pm T_AA)~O_0~(\pm T_BB)\bigl)~O_1~(\pm T_CC)\Bigl)~O_2~(\pm T_DD)\biggl) = 10`$
 
-**Possible Combinations:** $`5^3*3^6*2^6*2=11~664~000`$ 
+**Possible Combinations:** $`5^3*5^6*2^6*2=250~000~000`$  
 
 *Case 3: (A(BC))D*
 
 $`T_{ABCD=100}\biggl(\pm T_{ABC}\Bigl((\pm T_AA)~O_0~\pm T_{BC}\bigl((\pm T_BB)~O_1~(\pm T_CC)\bigl)\Bigl)~O_2~(\pm T_DD)\biggl) = 10`$
 
-**Possible Combinations:** $`5^3*3^6*2^6*2=11~664~000`$ 
+**Possible Combinations:** $`5^3*5^6*2^6*2=250~000~000`$  
 
 *Case 4:  A((BC)D)*
 
 $`T_{ABCD=100}\biggl((\pm T_AA)~O_0~\pm T_{BCD}\Bigl(\pm T_{BC}\bigl((\pm T_BB)~O_1~(\pm T_CC)\bigl)~O_2~(\pm T_DD)\Bigl)\biggl) = 10`$
 
-**Possible Combinations:** $`5^3*3^6*2^6*2=11~664~000`$ 
+**Possible Combinations:** $`5^3*5^6*2^6*2=250~000~000`$  
 
 *Case 5:  A(B(CD))*
 
 $`T_{ABCD=100}\biggl((\pm T_AA)~O_0~\pm T_{BCD}\Bigl((\pm T_BB)~O_1~\pm T_{CD}\bigl((\pm T_CC)~O_2~(\pm T_DD)\bigl)\Bigl)\biggl) = 10`$
 
-**Possible Combinations:** $`5^3*3^6*2^6*2=11~664~000`$ 
+**Possible Combinations:** $`5^3*5^6*2^6*2=250~000~000`$ 
 
-**Total Combinations: $`5*(5^3*3^6*2^6*2) + (5^3*3^4*2^4*2) = 58~644~000`$**
+**Total Combinations: $`5*(5^3*5^6*2^6*2) + (5^3*5^4*2^4*2) = 1~252~500~000`$**
 
 ***With 10, 000 Number Combos:*  586 440 000 000**
 
