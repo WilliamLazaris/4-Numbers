@@ -43,7 +43,7 @@ def factorial_sqrt_neg(str_n, n):
         options.append((f"{str_n}!", factorial_val))
         options.append((f"-{str_n}!", -factorial_val))
 
-        if factorial_val in [4,9,16,25,36,49,64,81,100,144,169,196,225]:
+        if factorial_val in [4,9,16,25,36,49,64,81,100,121,144,169,196,225]:
             factorial_int = int(factorial_val)
             sqrt_factorial_val = math.sqrt(factorial_int)
             options.append((f"sqrt({str_n}!)", sqrt_factorial_val))
@@ -54,7 +54,7 @@ def factorial_sqrt_neg(str_n, n):
         total_tested += 1
 
     # Check if n is non-negative for square root calculation
-    if n in [4,9,16,25,36,49,64,81,100,144,169,196,225]:
+    if n in [4,9,16,25,36,49,64,81,100,121,144,169,196,225]:
         sqrt_val = math.sqrt(n)
         options.append((f"sqrt({str_n})", sqrt_val))
         options.append((f"-sqrt({str_n})", -sqrt_val))
