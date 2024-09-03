@@ -28,28 +28,27 @@ def parentheses_needed(expression_without_parens, expression_with_parens):
     # Compare the results, if they are not close, parentheses are necessary
     return not math.isclose(result_without_parens, result_with_parens, rel_tol=1e-9)
 
-def factorial_sqrt_neg(n):
-    options = [(f"{int(n)}" if n.is_integer() else f"{round(n, 1)}", n)]  # Store formatted expression and its value
+def factorial_sqrt_neg(str_n, n):
+    options = [(f"{str_n}" if n.is_integer() else f"{round(n, 1)}", n)]  # Store formatted expression and its value
     # Add negative version of the number
-    options.append((f"-{int(n)}" if n.is_integer() else f"-{round(n, 1)}", -n))
+    options.append((f"-{str_n}" if n.is_integer() else f"-{round(n, 1)}", -n))
     
     # Check if n is a valid integer for factorial calculation
     #if n.is_integer() and (n in [0,3,4,5,6] or n >= 10):  # Limiting factorial to 0, 3, 4,10+
-    n_int = int(n)
-    factorial_val = math.factorial(n_int)
-    options.append((f"{n_int}!", factorial_val))
-    options.append((f"-{n_int}!", -factorial_val))
+    factorial_val = math.factorial(int(n))
+    options.append((f"{str_n}!", factorial_val))
+    options.append((f"-{str_n}!", -factorial_val))
 
     factorial_int = int(factorial_val)
     sqrt_factorial_val = math.sqrt(factorial_int)
-    options.append((f"sqrt({n_int}!)", sqrt_factorial_val))
-    options.append((f"-sqrt({n_int}!)", -sqrt_factorial_val))
+    options.append((f"sqrt({str_n}!)", sqrt_factorial_val))
+    options.append((f"-sqrt({str_n}!)", -sqrt_factorial_val))
 
     # Check if n is non-negative for square root calculation
     #if n in [4,9,16,25,36,49,64,81,100] or n > 100:
     sqrt_val = math.sqrt(n)
-    options.append((f"sqrt({n_int})", sqrt_val))
-    options.append((f"-sqrt({n_int})", -sqrt_val))
+    options.append((f"sqrt({str_n})", sqrt_val))
+    options.append((f"-sqrt({str_n})", -sqrt_val))
 
     # Factorial of the square root if the square root is an integer
     #if sqrt_val.is_integer() and (sqrt_val in [0,3,4,5,6] or sqrt_val >= 10):  # Limiting factorial for square root values
@@ -58,20 +57,20 @@ def factorial_sqrt_neg(n):
         factorial_sqrt_val = math.factorial(sqrt_val)
     else:
         factorial_sqrt_val = sqrt_val
-    options.append((f"sqrt({n_int})!", factorial_sqrt_val))
-    options.append((f"- sqrt({n_int})!", -factorial_sqrt_val))
+    options.append((f"sqrt({str_n})!", factorial_sqrt_val))
+    options.append((f"- sqrt({str_n})!", -factorial_sqrt_val))
 
     return options
 
-def check_combinations_to_ten(numbers):
+def check_combinations_to_ten(numbers, str_numbers):
     operators = ['+', '-', '*', '/', '**']
     combinations = []
     total_tested = 0  # Counter for the total combinations tested
     for ops in product(operators, repeat=3):
-        for a_expr, a in factorial_sqrt_neg(numbers[0]):
-            for b_expr, b in factorial_sqrt_neg(numbers[1]):
-                for c_expr, c in factorial_sqrt_neg(numbers[2]):
-                    for d_expr, d in factorial_sqrt_neg(numbers[3]):                 
+        for a_expr, a in factorial_sqrt_neg(str_numbers[0], numbers[0]):
+            for b_expr, b in factorial_sqrt_neg(str_numbers[1],numbers[1]):
+                for c_expr, c in factorial_sqrt_neg(str_numbers[2],numbers[2]):
+                    for d_expr, d in factorial_sqrt_neg(str_numbers[3],numbers[3]):                 
                         
                         # # Case 0: A B C D 
                         # expression = f"{a} {ops[0]} {b} {ops[1]} {c} {ops[2]} {d}"
@@ -97,27 +96,50 @@ def check_combinations_to_ten(numbers):
                         #     combinations.append(ABCD_combination)
                         
                         # Case 1 with AB CD factorial_sqrt_neg
-                        ab_expression = f"{a} {ops[0]} {b}"
-                        cd_expression = f"{c} {ops[2]} {d}"
+                        ab_expression = safe_eval(f"{a} {ops[0]} {b}")
+                        cd_expression = safe_eval(f"{c} {ops[2]} {d}")
+
+                        # Ensure ab_expression and cd_expression are valid before proceeding
+                        if ab_expression is not None and cd_expression is not None:
+                            ab_combination = f"({a_expr} {ops[0]} {b_expr})"                    
+                            cd_combination = f"({c_expr} {ops[2]} {d_expr})"
+
+                            for ab_expr, AB in factorial_sqrt_neg(ab_combination, ab_expression):
+                                for cd_expr, CD in factorial_sqrt_neg(cd_combination, cd_expression):
+                                    # Case 1: (AB) (CD)          
+                                    expression_with_parens = f"{AB} {ops[1]} {CD}"
+                                    combination = f"{ab_expr} {ops[1]} {cd_expr}"
+                                    total_tested += 1
+                                    
+                                    # Evaluate the expression and check if it equals 10 or sqrt(100)
+                                    result = safe_eval(expression_with_parens)                  
+                                    if result is not None and result == 10:  # Checking for exact equality
+                                        combinations.append(combination)
+                                    if result == 100:
+                                        ABCD_combination = f"sqrt({combination})"
+                                        combinations.append(ABCD_combination)
+
                         
-                        XX_expressions = [ab_expression, cd_expression]
-                        
-                        # ab_combination = f"({a_expr} {ops[0]} {b_expr})"                     
+                        # # Case 1 with AB CD factorial_sqrt_neg
+                        # ab_expression = safe_eval(f"{a} {ops[0]} {b}")
+                        # cd_expression = safe_eval(f"{c} {ops[2]} {d}")
+
+                        # ab_combination = f"({a_expr} {ops[0]} {b_expr})"                    
                         # cd_combination = f"({c_expr} {ops[2]} {d_expr})"
-                        
-                        for ab_expr, AB_expression in factorial_sqrt_neg(XX_expressions[0]):
-                            for cd_expr, CD_expression in factorial_sqrt_neg(XX_expressions[1]):
-                                # Case 1: (AB) (CD)          
-                                expression_with_parens = f"{AB_expression} {ops[1]} {CD_expression}"
-                                combination = f"{ab_expr} {ops[1]} {cd_expr}"
-                                total_tested += 1
-                                #if parentheses_needed(expression, expression_with_parens):
-                                result = safe_eval(expression_with_parens)                  
-                                if result is not None and result == 10:  # Checking for exact equality
-                                    combinations.append(combination)
-                                if result == 100:
-                                    ABCD_combination = f"sqrt({combination})"
-                                    combinations.append(ABCD_combination)
+
+                        # for ab_expr, AB in factorial_sqrt_neg(ab_combination, ab_expression):
+                        #     for cd_expr, CD in factorial_sqrt_neg(cd_combination, cd_expression):
+                        #         # Case 1: (AB) (CD)          
+                        #         expression_with_parens = f"{AB} {ops[1]} {CD}"
+                        #         combination = f"{ab_expr} {ops[1]} {cd_expr}"
+                        #         total_tested += 1
+                        #         #if parentheses_needed(expression, expression_with_parens):
+                        #         result = safe_eval(expression_with_parens)                  
+                        #         if result is not None and result == 10:  # Checking for exact equality
+                        #             combinations.append(combination)
+                        #         if result == 100:
+                        #             ABCD_combination = f"sqrt({combination})"
+                        #             combinations.append(ABCD_combination)
 
     return combinations, total_tested
 
@@ -128,8 +150,15 @@ def main():
         C = float(input("Enter value for C: "))
         D = float(input("Enter value for D: "))
 
+        str_A = str(A)
+        str_B = str(B)
+        str_C = str(C)
+        str_D = str(D)
+
         numbers = [A, B, C, D]
-        combinations, total_tested = check_combinations_to_ten(numbers)
+        str_numbers = [str_A, str_B, str_C, str_D]
+
+        combinations, total_tested = check_combinations_to_ten(numbers, str_numbers)
         
         if combinations:
             print(f"The possible combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10 are:")
