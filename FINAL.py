@@ -2,6 +2,8 @@ import math
 import time
 from itertools import product
 
+total_tested = 0  # Counter for the total combinations tested
+
 def safe_eval(expression):
     try:
         # Prevent overly large results by checking for large exponents
@@ -29,6 +31,7 @@ def parentheses_needed(expression_without_parens, expression_with_parens):
     return not math.isclose(result_without_parens, result_with_parens, rel_tol=1e-9)
 
 def factorial_sqrt_neg(str_n, n):
+    global total_tested
     n = abs(n)
     options=[]
     options.append((f"{str_n}" if n.is_integer() else f"{round(n, 1)}", n)) # Store formatted expression and its value
@@ -45,6 +48,10 @@ def factorial_sqrt_neg(str_n, n):
             sqrt_factorial_val = math.sqrt(factorial_int)
             options.append((f"sqrt({str_n}!)", sqrt_factorial_val))
             options.append((f"-sqrt({str_n}!)", -sqrt_factorial_val))
+        else:
+            total_tested += 1
+    else:
+        total_tested += 1
 
     # Check if n is non-negative for square root calculation
     if n in [4,9,16,25,36,49,64,81,100,144,169,196,225]:
@@ -59,15 +66,21 @@ def factorial_sqrt_neg(str_n, n):
                 factorial_sqrt_val = math.factorial(sqrt_val)
             else:
                 factorial_sqrt_val = sqrt_val
+            
             options.append((f"sqrt({str_n})!", factorial_sqrt_val))
             options.append((f"- sqrt({str_n})!", -factorial_sqrt_val))
-
+        
+        else:
+            total_tested += 1
+    else:
+        total_tested += 1
+    
     return options
 
 def check_combinations_to_ten(numbers, str_numbers):
+    global total_tested
     operators = ['+', '-', '*', '/', '**']
     combinations = []
-    total_tested = 0  # Counter for the total combinations tested
     for ops in product(operators, repeat=3):
         for a_expr, a in factorial_sqrt_neg(str_numbers[0], numbers[0]):
             for b_expr, b in factorial_sqrt_neg(str_numbers[1],numbers[1]):
@@ -195,7 +208,7 @@ def check_combinations_to_ten(numbers, str_numbers):
                                                     ABCD_combination = f"sqrt({combination})"
                                                     combinations.append(ABCD_combination)
 
-    return combinations, total_tested
+    return combinations
 
 def main():
     try:
@@ -211,8 +224,9 @@ def main():
 
         numbers = [A, B, C, D]
         str_numbers = [str_A, str_B, str_C, str_D]
-
-        combinations, total_tested = check_combinations_to_ten(numbers, str_numbers)
+        global total_tested
+        
+        combinations = check_combinations_to_ten(numbers, str_numbers)
         
         if combinations:
             print(f"The possible combinations of {int(A)}, {int(B)}, {int(C)}, and {int(D)} (including factorials, square roots, and negatives) that result in 10 are:")
