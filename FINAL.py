@@ -83,13 +83,31 @@ def check_combinations_to_ten(numbers, str_numbers):
     global total_tested
     operators = ['+', '-', '*', '/', '**']
     combinations = []
+    
+    total_to_test = 1_252_500_000  # Estimated total combinations to test
+    start_time = time.time()
+    next_estimation_time = start_time + 15
+    
     for ops in product(operators, repeat=3):
         for a_expr, a in factorial_sqrt_neg(str_numbers[0], numbers[0]):
             for b_expr, b in factorial_sqrt_neg(str_numbers[1],numbers[1]):
                 for c_expr, c in factorial_sqrt_neg(str_numbers[2],numbers[2]):
                     for d_expr, d in factorial_sqrt_neg(str_numbers[3],numbers[3]):                 
                         
-                        print(total_tested)
+                        if total_tested % 10000000 == 0:
+                            print(total_tested)
+                        
+                        current_time = time.time()
+                        if current_time >= next_estimation_time:
+                            elapsed_time = current_time - start_time
+                            rate = total_tested / elapsed_time  # Combinations per second
+                            if rate > 0:
+                                estimated_time_remaining = (total_to_test - total_tested) / rate
+                                estimated_minutes_remaining = estimated_time_remaining / 60  # Convert seconds to minutes
+                                print(f"Estimated time remaining: {estimated_minutes_remaining:.2f} minutes")
+                            next_estimation_time = current_time + 15
+                            
+                        # print(total_tested)
 
                         # Case 0: A B C D 
                         expression = f"{a} {ops[0]} {b} {ops[1]} {c} {ops[2]} {d}"
@@ -231,9 +249,9 @@ def check_combinations_to_ten(numbers, str_numbers):
                                                     ABCD_combination = f"sqrt({combination})"
                                                     combinations.append(ABCD_combination)
                                         else:
-                                            total_tested += 19998000
+                                            total_tested += 400
                         else:
-                            total_tested += 20000000
+                            total_tested += 500
     return combinations
 
 def main():
