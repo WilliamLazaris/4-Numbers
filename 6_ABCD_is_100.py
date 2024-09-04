@@ -73,21 +73,24 @@ def check_combinations_to_ten(numbers):
                 for c_expr, c in factorial_sqrt_neg(numbers[2]):
                     for d_expr, d in factorial_sqrt_neg(numbers[3]):                 
                         
+                        print(total_tested)
+                        
                         # Case 0: A B C D 
                         expression = f"{a} {ops[0]} {b} {ops[1]} {c} {ops[2]} {d}"
                         combination = f"{a_expr} {ops[0]} {b_expr} {ops[1]} {c_expr} {ops[2]} {d_expr}"
-                        total_tested += 1
+                        total_tested += 2
                         result = safe_eval(expression)
                         if result is not None and result == 10:  # Checking for exact equality
                             combinations.append(combination)
                         if result == 100:
                             ABCD_combination = f"sqrt({combination})"
                             combinations.append(ABCD_combination)
+                                                        
 
                         # Case 1: (AB) (CD)
                         expression_with_parens = f"({a} {ops[0]} {b}) {ops[1]} ({c} {ops[2]} {d})"
                         combination = f"({a_expr} {ops[0]} {b_expr}) {ops[1]} ({c_expr} {ops[2]} {d_expr})"
-                        total_tested += 1
+                        total_tested += 2
                         #if parentheses_needed(expression, expression_with_parens):
                         result = safe_eval(expression_with_parens)                  
                         if result is not None and result == 10:  # Checking for exact equality
@@ -99,7 +102,7 @@ def check_combinations_to_ten(numbers):
                         # Case 2: ((AB) C) D
                         expression_with_parens = f"(({a} {ops[0]} {b}) {ops[1]} {c}) {ops[2]} {d}"
                         combination = f"(({a_expr} {ops[0]} {b_expr}) {ops[1]} {c_expr}) {ops[2]} {d_expr}"
-                        total_tested += 1
+                        total_tested += 2
                         #if parentheses_needed(expression, expression_with_parens):
                         result = safe_eval(expression_with_parens)
                         if result is not None and result == 10:  # Checking for exact equality
@@ -111,7 +114,7 @@ def check_combinations_to_ten(numbers):
                         # Case 3: (A (BC)) D
                         expression_with_parens = f"({a} {ops[0]} ({b} {ops[1]} {c})) {ops[2]} {d}"
                         combination = f"({a_expr} {ops[0]} ({b_expr} {ops[1]} {c_expr})) {ops[2]} {d_expr}"
-                        total_tested += 1
+                        total_tested += 2
                         #if parentheses_needed(expression, expression_with_parens):
                         result = safe_eval(expression_with_parens)
                         if result is not None and result == 10:  # Checking for exact equality
@@ -123,7 +126,7 @@ def check_combinations_to_ten(numbers):
                         # Case 4: A ((BC) D)
                         expression_with_parens = f"{a} {ops[0]} (({b} {ops[1]} {c}) {ops[2]} {d})"
                         combination = f"{a_expr} {ops[0]} (({b_expr} {ops[1]} {c_expr}) {ops[2]} {d_expr})"                        
-                        total_tested += 1
+                        total_tested += 2
                         #if parentheses_needed(expression, expression_with_parens):
                         result = safe_eval(expression_with_parens)
                         if result is not None and result == 10:  # Checking for exact equality
@@ -135,7 +138,7 @@ def check_combinations_to_ten(numbers):
                         # Case 5: A (B (CD))
                         expression_with_parens = f"{a} {ops[0]} ({b} {ops[1]} ({c} {ops[2]} {d}))"
                         combination = f"{a_expr} {ops[0]} ({b_expr} {ops[1]} ({c_expr} {ops[2]} {d_expr}))"                        
-                        total_tested += 1
+                        total_tested += 2
                         #if parentheses_needed(expression, expression_with_parens):
                         result = safe_eval(expression_with_parens)
                         if result is not None and result == 10:  # Checking for exact equality
